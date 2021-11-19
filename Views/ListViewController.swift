@@ -128,4 +128,8 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func didDeleteToDo(_ todo: ToDo?) {
         self.loadData()
     }
+    
+    func didUpdateToDoStatus(_ todo: ToDo) {
+        self.loadData()
+    }
 }

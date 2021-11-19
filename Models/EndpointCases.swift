@@ -12,6 +12,7 @@ enum EndpointCases: Endpoint {
     case getToDos
     case addToDo(todo: ToDo)
     case deleteToDo(id: Int)
+    case changeStatus(todo: ToDo)
     
     var httpMethod: HTTPMethod {
         switch self {
@@ -21,6 +22,8 @@ enum EndpointCases: Endpoint {
             return HTTPMethod.POST
         case .deleteToDo:
             return HTTPMethod.DELETE
+        case .changeStatus:
+            return HTTPMethod.PATCH
         }
     }
     
@@ -33,6 +36,7 @@ enum EndpointCases: Endpoint {
         case .getToDos: return "user/1/todo"
         case .addToDo: return "user/1/todo"
         case .deleteToDo(let id): return "user/1/todo/\(id)"
+        case .changeStatus(let todo): return "user/1/todo/\(todo.id ?? -1)"
         }
     }
     
@@ -52,6 +56,8 @@ enum EndpointCases: Endpoint {
                     "description": todo.description ?? "",
                     "isCompleted": false]
         case .deleteToDo: return nil
+        case .changeStatus(let todo):
+            return ["isCompleted": !todo.isCompleted]
         }
     }
     

@@ -122,7 +122,9 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         title = "Detail ukolu"
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(image: UIImage(systemName: "trash.square"), style: .plain, target: self, action: #selector(deleteToDo)),
-            UIBarButtonItem(image: UIImage(systemName: "checkmark.square"), style: .plain, target: self, action: nil)
+            UIBarButtonItem(
+                image: UIImage(systemName: todo.isCompleted ? "checkmark.square" : "square"),
+                style: .plain, target: self, action: #selector(changeStatus))
         ]
     }
     
@@ -188,6 +190,19 @@ class DetailViewController: UIViewController, UITextViewDelegate {
                     }
                 case .failure(let error): self?.handleFailure(error)
                 }
+            }
+        }
+    }
+    
+    @objc func changeStatus() {
+        HttpWorker.shared.changeStatus(todo: todo) { [weak self] result in
+            switch result {
+            case .success(let updatedTodo):
+                DispatchQueue.main.async {
+                    self?.delegate?.didUpdateToDoStatus(updatedTodo)
+                    self?.dismissMy()
+                }
+            case .failure(let error): self?.handleFailure(error)
             }
         }
     }

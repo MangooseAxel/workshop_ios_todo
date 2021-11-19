@@ -54,6 +54,22 @@ class HttpWorker {
         }
     }
     
+    func changeStatus(todo: ToDo, completion: @escaping (Result<ToDo, ErrorMessage>) -> Void) {
+        let todosRequest = EndpointCases.changeStatus(todo: todo).request
+        request(request: todosRequest) { result in
+            switch result {
+            case .success(let data):
+                if let data = data, let updatedToDo = try? JSONDecoder().decode(ToDo.self, from: data) {
+                    completion(.success(updatedToDo))
+                } else {
+                    completion(.failure(.invalidDataFormat))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     private func request(request: URLRequest, completion: @escaping (Result<Data?, ErrorMessage>) -> Void) {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             
