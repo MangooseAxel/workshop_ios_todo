@@ -41,11 +41,16 @@ class ToDoCell: UITableViewCell {
         contentView.addSubview(wrapper)
         wrapper.backgroundColor = .white
         wrapper.layer.cornerRadius = 8
-        wrapper.translatesAutoresizingMaskIntoConstraints = false
         
+        wrapper.layer.shadowColor = UIColor.darkGray.cgColor
+        wrapper.layer.shadowOffset = CGSize(width: 0, height: 2.5)
+        wrapper.layer.shadowRadius = 3
+        wrapper.layer.shadowOpacity = 0.1
+        
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             wrapper.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.96),
-            wrapper.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.92),
+            wrapper.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.9),
             wrapper.centerXAnchor.constraint(equalTo: centerXAnchor),
             wrapper.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])

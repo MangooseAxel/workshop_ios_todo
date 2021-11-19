@@ -139,17 +139,26 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     
     func prepareCreateButton() {
         let button = UIButton()
-        view.addSubview(button)
-        button.setImage(UIImage(systemName: "checkmark"), for: .normal)
-        button.imageView?.layer.transform = CATransform3DMakeScale(0.9, 0.9, 0.9)
-        button.setTitle(" Vyvvorit", for: .normal)
-        button.tintColor = .white
-        button.titleLabel?.font = .systemFont(ofSize: 16)
         button.backgroundColor = UIColor.init(red: 0/255, green: 125/255, blue: 155/255, alpha: 1)
         button.layer.cornerRadius = 8
-        button.addTarget(nil, action: #selector(createToDo), for: .touchDown)
-        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.masksToBounds = false
+        button.layer.shadowColor = UIColor.darkGray.cgColor
+        button.layer.shadowOffset = CGSize(width: 1, height: 2.5)
+        button.layer.shadowRadius = 3
+        button.layer.shadowOpacity = 0.6
         
+        button.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        button.imageView?.layer.transform = CATransform3DMakeScale(0.9, 0.9, 0.9)
+        button.tintColor = .white
+        
+        button.setTitle(" Vyvvorit", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16)
+
+        button.addTarget(nil, action: #selector(createToDo), for: .touchDown)
+        
+        view.addSubview(button)
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
