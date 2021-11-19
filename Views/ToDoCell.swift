@@ -20,6 +20,7 @@ class ToDoCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
+        self.backgroundColor = .clear
         prepare()
     }
     
@@ -44,9 +45,9 @@ class ToDoCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             wrapper.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.96),
-            wrapper.heightAnchor.constraint(equalTo: heightAnchor),
+            wrapper.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.92),
             wrapper.centerXAnchor.constraint(equalTo: centerXAnchor),
-            wrapper.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 10)
+            wrapper.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
     

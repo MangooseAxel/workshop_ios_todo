@@ -75,6 +75,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.rowHeight = 124
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .systemGray6
+        tableView.separatorStyle = .none
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
