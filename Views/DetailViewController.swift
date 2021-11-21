@@ -7,10 +7,7 @@
 
 import UIKit
 
-class DetailViewController: UIViewController, UITextViewDelegate {
-    
-    let scrollView = UIScrollView()
-    let contentView = UIView()
+class DetailViewController: UIViewController {
     
     var todo: ToDo!
     var titleView: SingleLineInputView!
@@ -19,6 +16,10 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     var descriptionView: MultiLineInputView!
     
     weak var delegate: ToDoDelegate?
+    var activeTextField: UITextField? = nil
+    var activeTextView: UITextView? = nil
+    var createButton: UIButton? = nil
+    var keyboardSize: CGRect? = nil
     
     init(todo: ToDo = ToDo(userId: 1, title: "", date: "", category: "", description: "", isCompleted: false)) {
         super.init(nibName: nil, bundle: nil)
@@ -41,80 +42,82 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         prepare()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+           return
+         }
+
+        let bottomOfTextField = descriptionView.convert(descriptionView.bounds, to: self.view).maxY;
+        let topOfKeyboard = self.view.frame.height - keyboardSize.height
+        
+        if bottomOfTextField > topOfKeyboard {
+            self.view.frame.origin.y = 0 - (bottomOfTextField - topOfKeyboard)
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        self.view.frame.origin.y = 0
     }
     
     func prepare() {
-        prepareScrollView()
-        prepareContentView()
+        view.backgroundColor = .systemGray6
         prepareTitleView()
         prepareDateView()
         prepareCategoryView()
         prepareDescriptionView()
     }
     
-    func prepareScrollView() {
-        view.addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.isPagingEnabled = false
-        scrollView.backgroundColor = .systemGray6
-        
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-    
-    func prepareContentView() {
-        scrollView.addSubview(contentView)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.backgroundColor = .white
-        
-        NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor)
-        ])
-    }
-    
     func prepareTitleView() {
-        contentView.addSubview(titleView)
+        view.addSubview(titleView)
+        titleView.backgroundColor = .white
+        titleView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            titleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            titleView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            titleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     
     func prepareCategoryView() {
-        contentView.addSubview(categoryView)
-        
+        view.addSubview(categoryView)
+        categoryView.backgroundColor = .white
+        categoryView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            categoryView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            categoryView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             categoryView.topAnchor.constraint(equalTo: dateView.bottomAnchor),
-            categoryView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            categoryView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     
     func prepareDateView() {
-        contentView.addSubview(dateView)
-        
+        view.addSubview(dateView)
+        dateView.backgroundColor = .white
+        dateView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dateView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            dateView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             dateView.topAnchor.constraint(equalTo: titleView.bottomAnchor),
-            dateView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            dateView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     
     func prepareDescriptionView() {
-        contentView.addSubview(descriptionView)
-        
+        view.addSubview(descriptionView)
+        descriptionView.backgroundColor = .white
+        descriptionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            descriptionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            descriptionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             descriptionView.topAnchor.constraint(equalTo: categoryView.bottomAnchor),
-            descriptionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            descriptionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            descriptionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            descriptionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.18)
         ])
     }
     
@@ -130,42 +133,61 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     
     func prepareModal() {
         title = "Novy ukol"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "multiply.circle.fill"),
-            style: .plain, target: self, action: #selector(dismissMy))
-        navigationItem.rightBarButtonItem?.tintColor = .white
+
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        view.backgroundColor = UIColor(cgColor: .init(red: 237/255, green: 192/255, blue: 52/255, alpha: 1))
+        view.layer.cornerRadius = 0.5 * view.bounds.size.width
+        
+        let imageView = UIImageView(frame: CGRect(x: 9, y: 9, width: 12, height: 12))
+        let image = UIImage(systemName: "multiply")
+        imageView.backgroundColor = .clear
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = image
+        imageView.tintColor = .darkGray
+        
+        let button = UIButton(frame: view.bounds)
+        button.addTarget(self, action: #selector(dismissMy), for: .touchDown)
+        
+        view.addSubview(imageView)
+        view.addSubview(button)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: view)
         prepareCreateButton()
     }
     
     func prepareCreateButton() {
-        let button = UIButton()
-        button.backgroundColor = UIColor.init(red: 0/255, green: 125/255, blue: 155/255, alpha: 1)
-        button.layer.cornerRadius = 8
-        button.layer.masksToBounds = false
-        button.layer.shadowColor = UIColor.darkGray.cgColor
-        button.layer.shadowOffset = CGSize(width: 1, height: 2.5)
-        button.layer.shadowRadius = 3
-        button.layer.shadowOpacity = 0.6
-        
-        button.setImage(UIImage(systemName: "checkmark"), for: .normal)
-        button.imageView?.layer.transform = CATransform3DMakeScale(0.9, 0.9, 0.9)
-        button.tintColor = .white
-        
-        button.setTitle(" Vyvvorit", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16)
+        createButton = UIButton()
+        if let createButton = createButton {
+            createButton.backgroundColor = UIColor.init(red: 0/255, green: 125/255, blue: 155/255, alpha: 1)
+            createButton.layer.cornerRadius = 8
+            createButton.layer.masksToBounds = false
+            createButton.layer.shadowColor = UIColor.darkGray.cgColor
+            createButton.layer.shadowOffset = CGSize(width: 1, height: 2.5)
+            createButton.layer.shadowRadius = 3
+            createButton.layer.shadowOpacity = 0.6
+            
+            createButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            createButton.imageView?.layer.transform = CATransform3DMakeScale(0.9, 0.9, 0.9)
+            createButton.tintColor = .white
+            
+            createButton.setTitle(" Vytvorit", for: .normal)
+            createButton.titleLabel?.font = .systemFont(ofSize: 16)
 
-        button.addTarget(nil, action: #selector(createToDo), for: .touchDown)
-        
-        view.addSubview(button)
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
-            button.heightAnchor.constraint(equalToConstant: 45),
-            button.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.92)
-        ])
+            createButton.addTarget(nil, action: #selector(createToDo), for: .touchDown)
+            
+            view.addSubview(createButton)
+            
+            createButton.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                createButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                createButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+                createButton.heightAnchor.constraint(equalToConstant: 45),
+                createButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.92)
+            ])
+        }
     }
+    
+    
     
     @objc func createToDo() {
         let datepicker = dateView.textField.inputView?.subviews[0] as? UIDatePicker
