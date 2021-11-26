@@ -28,7 +28,6 @@
 		FA911DA52721531D0041E0EA /* ToDoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA911DA42721531D0041E0EA /* ToDoUITests.swift */; };
 		FAE4070F2721853D00C32A92 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE4070E2721853D00C32A92 /* ToDo.swift */; };
 		FAE407122721868E00C32A92 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE407112721868E00C32A92 /* ListViewController.swift */; };
-		FAE407172721889600C32A92 /* ToDoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE407162721889600C32A92 /* ToDoService.swift */; };
 		FAE40719272188F300C32A92 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE40718272188F300C32A92 /* ErrorMessage.swift */; };
 		FAF44E6A2746AEC5003BD60D /* ToDoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF44E692746AEC5003BD60D /* ToDoDelegate.swift */; };
 		FAF787782746925B00381591 /* ImageLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF787772746925B00381591 /* ImageLabelView.swift */; };
@@ -79,7 +78,6 @@
 		FA911DA62721531D0041E0EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FAE4070E2721853D00C32A92 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		FAE407112721868E00C32A92 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
-		FAE407162721889600C32A92 /* ToDoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoService.swift; sourceTree = "<group>"; };
 		FAE40718272188F300C32A92 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		FAF44E692746AEC5003BD60D /* ToDoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoDelegate.swift; sourceTree = "<group>"; };
 		FAF787772746925B00381591 /* ImageLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLabelView.swift; sourceTree = "<group>"; };
@@ -197,7 +195,6 @@
 		FAE407152721888000C32A92 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				FAE407162721889600C32A92 /* ToDoService.swift */,
 				FA20B6B32742AF28006DC644 /* HttpWorker.swift */,
 			);
 			path = Services;
@@ -213,6 +210,7 @@
 				FA911D7B2721531B0041E0EA /* Sources */,
 				FA911D7C2721531B0041E0EA /* Frameworks */,
 				FA911D7D2721531B0041E0EA /* Resources */,
+				FA50209F274F765D000B3587 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -327,12 +325,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		FA50209F274F765D000B3587 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		FA911D7B2721531B0041E0EA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAE407172721889600C32A92 /* ToDoService.swift in Sources */,
 				FA2A5C1427355C5F002D7753 /* MultiLineInputView.swift in Sources */,
 				FA6F670A273C5E8500E58304 /* LabelIconView.swift in Sources */,
 				FA911D832721531B0041E0EA /* AppDelegate.swift in Sources */,

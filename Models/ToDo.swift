@@ -21,12 +21,12 @@ protocol PropertyReflectable { }
 
 extension PropertyReflectable {
     subscript(key: String) -> Any? {
-        let m = Mirror(reflecting: self)
-        return m.children.first { $0.label == key }?.value
+        let mirror = Mirror(reflecting: self)
+        return mirror.children.first { $0.label == key }?.value
     }
 }
 
-extension ToDo : PropertyReflectable {}
+extension ToDo: PropertyReflectable {}
 
 let todosMock: [ToDo] = [ToDo(
     id: 5,
@@ -54,4 +54,4 @@ ToDo(
     category: "Testing",
     description: "Je potřeba vyzkoušet, zda se po creatu zavře modal",
     isCompleted: true
-)];
+)]

@@ -9,7 +9,7 @@ import Foundation
 
 class HttpWorker {
     static let shared = HttpWorker()
-    
+
     func getToDos(completion: @escaping (Result<[ToDo], ErrorMessage>) -> Void) {
         let todosRequest = EndpointCases.getToDos.request
         request(request: todosRequest) { result in
@@ -25,7 +25,7 @@ class HttpWorker {
             }
         }
     }
-    
+
     func addToDo(todo: ToDo, completion: @escaping (Result<ToDo, ErrorMessage>) -> Void) {
         let todosRequest = EndpointCases.addToDo(todo: todo).request
         request(request: todosRequest) { result in
@@ -41,19 +41,19 @@ class HttpWorker {
             }
         }
     }
-    
+
     func deleteToDo(id: Int, completion: @escaping (Result<Any, ErrorMessage>) -> Void) {
         let todosRequest = EndpointCases.deleteToDo(id: id).request
         request(request: todosRequest) { result in
             switch result {
-            case .success(_):
+            case .success:
                 completion(.success(""))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
     }
-    
+
     func changeStatus(todo: ToDo, completion: @escaping (Result<ToDo, ErrorMessage>) -> Void) {
         let todosRequest = EndpointCases.changeStatus(todo: todo).request
         request(request: todosRequest) { result in
@@ -69,28 +69,28 @@ class HttpWorker {
             }
         }
     }
-    
+
     private func request(request: URLRequest, completion: @escaping (Result<Data?, ErrorMessage>) -> Void) {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            
-            if let _ = error {
+
+            if error != nil {
                 completion(.failure(.invalidData))
                 return
             }
-            
-            guard let _ = response as? HTTPURLResponse else {
+
+            if response == nil {
                 completion(.failure(.invalidResponse))
                 return
             }
-            
+
             guard let data = data else {
                 completion(.failure(.invalidData))
                 return
             }
-            
+
             completion(.success(data))
         }
-        
+
         task.resume()
     }
 }

@@ -8,12 +8,12 @@
 import Foundation
 
 enum EndpointCases: Endpoint {
-    
+
     case getToDos
     case addToDo(todo: ToDo)
     case deleteToDo(id: Int)
     case changeStatus(todo: ToDo)
-    
+
     var httpMethod: HTTPMethod {
         switch self {
         case .getToDos:
@@ -26,11 +26,11 @@ enum EndpointCases: Endpoint {
             return HTTPMethod.PATCH
         }
     }
-    
+
     var baseURLString: URL {
         return URL(string: "https://utb-todo-backend.docker.b2a.cz/")!
     }
-    
+
     var path: String {
         switch self {
         case .getToDos: return "user/1/todo"
@@ -39,13 +39,13 @@ enum EndpointCases: Endpoint {
         case .changeStatus(let todo): return "user/1/todo/\(todo.id ?? -1)"
         }
     }
-    
+
     var headers: [String: String]? {
         return ["Content-Type": "application/json",
                 "Accept": "application/json"]
     }
-    
-    var body: [String : Any]? {
+
+    var body: [String: Any]? {
         switch self {
         case .getToDos: return nil
         case .addToDo(let todo):
@@ -60,16 +60,16 @@ enum EndpointCases: Endpoint {
             return ["isCompleted": !todo.isCompleted]
         }
     }
-    
+
     var request: URLRequest {
         let url = URL(string: path, relativeTo: baseURLString)!
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = headers
         request.httpMethod = httpMethod.rawValue
-        if let _ = body, let jsonData = try? JSONSerialization.data(withJSONObject: body as Any) {
+        if body != nil, let jsonData = try? JSONSerialization.data(withJSONObject: body as Any) {
             request.httpBody = jsonData
         }
-        
+
         return request
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 class ToDoCell: UITableViewCell {
-    
+
     static let identifier = "toDoCell"
     let wrapper = UIView()
     var titleLabel = UILabel()
@@ -23,11 +23,11 @@ class ToDoCell: UITableViewCell {
         self.backgroundColor = .clear
         prepare()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func prepare() {
         prepareWrapper()
         prepareChevron()
@@ -36,17 +36,17 @@ class ToDoCell: UITableViewCell {
         prepareCategory()
         prepareDate()
     }
-    
+
     func prepareWrapper() {
         contentView.addSubview(wrapper)
         wrapper.backgroundColor = .white
         wrapper.layer.cornerRadius = 8
-        
+
         wrapper.layer.shadowColor = UIColor.darkGray.cgColor
         wrapper.layer.shadowOffset = CGSize(width: 0, height: 2.5)
         wrapper.layer.shadowRadius = 3
         wrapper.layer.shadowOpacity = 0.1
-        
+
         wrapper.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             wrapper.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.96),
@@ -55,14 +55,14 @@ class ToDoCell: UITableViewCell {
             wrapper.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
-    
+
     func prepareChevron() {
         wrapper.addSubview(chevron)
         chevron.image = UIImage(systemName: "chevron.right")
         chevron.contentMode = .scaleAspectFit
         chevron.tintColor = .lightGray
         chevron.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             chevron.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor, constant: -15),
             chevron.heightAnchor.constraint(equalToConstant: 16),
@@ -70,21 +70,21 @@ class ToDoCell: UITableViewCell {
             chevron.topAnchor.constraint(equalTo: wrapper.topAnchor, constant: 20)
         ])
     }
-    
+
     func prepareTitle() {
         wrapper.addSubview(titleLabel)
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font  = .systemFont(ofSize: 16, weight: .bold)
-    
+
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor, constant: 18),
             titleLabel.topAnchor.constraint(equalTo: chevron.topAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: chevron.leadingAnchor)
         ])
     }
-    
+
     func prepareDescription() {
         wrapper.addSubview(descriptionLabel)
         descriptionLabel.numberOfLines = 1
@@ -93,36 +93,36 @@ class ToDoCell: UITableViewCell {
         descriptionLabel.font  = .systemFont(ofSize: 14, weight: .regular)
         descriptionLabel.textColor = .darkGray
         descriptionLabel.lineBreakMode = .byTruncatingTail
-        
+
         NSLayoutConstraint.activate([
             descriptionLabel.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor, constant: 18),
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             descriptionLabel.trailingAnchor.constraint(equalTo: chevron.leadingAnchor, constant: -40)
         ])
     }
-    
+
     func prepareCategory() {
         wrapper.addSubview(categoryLabel)
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             categoryLabel.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor, constant: 18),
             categoryLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 17),
             categoryLabel.widthAnchor.constraint(equalTo: wrapper.widthAnchor, multiplier: 0.3)
         ])
     }
-    
+
     func prepareDate() {
         wrapper.addSubview(dateLabel)
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             dateLabel.leadingAnchor.constraint(equalTo: categoryLabel.trailingAnchor, constant: 40),
             dateLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 17),
             dateLabel.trailingAnchor.constraint(equalTo: chevron.leadingAnchor, constant: -40)
         ])
     }
-    
+
     func setup(todo: ToDo) {
         titleLabel.text = todo.title
         descriptionLabel.text = todo.description ?? ""

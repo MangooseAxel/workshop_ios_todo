@@ -26,12 +26,12 @@ extension Date {
             return dateFormatter.string(from: date)
         }
     }
-    
+
     func toString(from dateISO8601String: String, toFormat: DateStringFormat = .short) -> String {
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions.insert(.withFractionalSeconds)
         let date = dateFormatter.date(from: dateISO8601String) ?? Date()
-        
+
         return self.toString(from: date)
     }
 
